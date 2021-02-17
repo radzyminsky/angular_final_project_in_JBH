@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { from } from 'rxjs';
 import { coin, price } from '../interfaces';
-import { CoinsService } from '../coins.service';
+import { getAPIservis } from '../getAPI.service';
 
 
 @Component({
@@ -12,16 +12,20 @@ import { CoinsService } from '../coins.service';
 
 export class CoinCompComponent implements OnInit {
   @Input() coin: coin;
-
+  @Input()show ;
+  @Input()show_button:boolean;
   @Output() event_name: EventEmitter<coin> = new EventEmitter<coin>();
 
-  show: boolean;
+  Show: boolean;
   Price: price;
   
 
 
-  constructor(private coinService: CoinsService) {
-    this.show = true;
+  constructor(private getAPI: getAPIservis) {
+    if(typeof(this.show)==="boolean"){
+      this.Show=this.show;
+    }
+    this.Show = true;
     this.Price = null;
     this.event_name = new EventEmitter();
   }
@@ -38,11 +42,18 @@ export class CoinCompComponent implements OnInit {
   }
 
   onClick(): void {
-    this.show = !this.show;
+    this.Show = !this.Show;
+    if(!this.Show){
+      this.get_price();
+    }
+
+  }
+
+  get_price(){
     if (!this.Price) {
-      this.coinService.Get("https://api.coingecko.com/api/v3/coins/" + this.coin.id).subscribe(data => {
+      this.getAPI.Get("https://api.coingecko.com/api/v3/coins/" + this.coin.id).subscribe(data => {
         this.Price = {
-          usd: data.market_data.current_price.usd + " &#36;",
+          usd: data.market_data.current_price.usd ,
           ils: data.market_data.current_price.ils + " &#8362;",
           eur: data.market_data.current_price.eur + " &#8364;"
         };
@@ -50,12 +61,14 @@ export class CoinCompComponent implements OnInit {
       })
 
     }
-
   }
 
 
 
   ngOnInit(): void {
+    if(!this.Show){
+      this.get_price();
+    }
   }
 
 }

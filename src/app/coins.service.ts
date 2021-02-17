@@ -1,18 +1,20 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { getAPIservis } from './getAPI.service';
+import { coin } from './interfaces';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CoinsService {
 
-  constructor(private httpClient: HttpClient) {
+  ListOfCoins: coin[];
+  for_live_reports: coin[];
+  
+
+  constructor() { 
+    this.ListOfCoins = [];
+    this.for_live_reports = [];
   }
 
-  Get(url:string): Observable<any> {
-    return this.httpClient.get(url);
-
-  }
   
 }

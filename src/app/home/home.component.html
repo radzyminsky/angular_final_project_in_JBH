@@ -1,0 +1,24 @@
+
+<form class="form-inline my-2 my-lg-0">
+    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+  </form>
+
+<div class="container" *ngIf='!over '>
+    <div class="row">   
+      <div *ngFor='let coin of ListOfCoins'>
+        <app-coin-comp (event_name)="add_or_remove($event)" [coin]='coin'></app-coin-comp>
+      </div>  
+    </div>
+  </div>
+  
+  
+  
+  <div class="container" *ngIf='over'>
+    <div class="row">   
+      <div *ngFor='let coin of for_live_reports'>
+        <app-coin-comp (event_name)="add_or_remove($event)" [coin]='coin'></app-coin-comp>
+      </div>
+      <button type="button" class="btn btn-warning" (click)="Cancel()">cancel</button>
+    </div>
+  </div>
